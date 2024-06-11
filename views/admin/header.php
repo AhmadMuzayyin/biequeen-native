@@ -1,3 +1,13 @@
+<?php
+include 'config/db.php';
+$profil = mysqli_query($conn, "SELECT * FROM company_profiles");
+$profil = mysqli_fetch_assoc($profil);
+session_start();
+if (!isset($_SESSION['login'])) {
+    header('Location: /admin/login');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +19,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>BieQueen - Dashboard</title>
+    <title><?= $profil != null ? $profil['nama'] : 'Restaurant' ?> - Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link href="/views/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -17,7 +27,8 @@
     <!-- Custom styles for this template-->
     <link href="/views/admin/css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="icon" href="/views/assets/images/favicon/icon.png">
-
+    <!-- Custom styles for this page -->
+    <link href="/views/admin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -42,7 +53,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['name'] ?></span>
                                 <img class="img-profile rounded-circle" src="/views/admin/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->

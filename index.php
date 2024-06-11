@@ -3,8 +3,43 @@ include 'config/db.php';
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $request_uri = trim($request_uri, '/');
 $page = $request_uri ?: '/';
+function start_push($key)
+{
+    ob_start();
+    $GLOBALS['__push_stack'][$key] = $GLOBALS['__push_stack'][$key] ?? '';
+}
 
-$page != 'admin' ? include 'views/header.php' : include 'views/admin/header.php';
+function end_push($key)
+{
+    $content = ob_get_clean();
+    $GLOBALS['__push_stack'][$key] .= $content;
+}
+
+function yield_push($key)
+{
+    return $GLOBALS['__push_stack'][$key] ?? '';
+}
+if (in_array($page, [
+    'admin',
+    'admin/menu',
+    'admin/create_menu',
+    'admin/edit_menu',
+    'admin/pesanan',
+    'admin/pesanan/create',
+    'admin/pesanan/edit',
+    'admin/promo',
+    'admin/promo/create',
+    'admin/promo/edit',
+    'admin/pengguna',
+    'admin/pengguna/create',
+    'admin/pengguna/edit',
+    'admin/profil',
+    'admin/admin-feedback',
+])) {
+    include 'views/admin/header.php';
+} elseif ($page != 'admin/login') {
+    include 'views/header.php';
+}
 // Routing logic
 switch ($request_uri) {
     case '':
@@ -38,11 +73,76 @@ switch ($request_uri) {
     case 'admin':
         include 'views/admin/index.php';
         break;
+    case 'admin/menu':
+        include 'views/admin/menu/menu.php';
+        break;
+    case 'admin/create_menu':
+        include 'views/admin/menu/create_menu.php';
+        break;
+    case 'admin/edit_menu':
+        include 'views/admin/menu/edit_menu.php';
+        break;
+    case 'admin/pesanan':
+        include 'views/admin/pesanan/index.php';
+        break;
+    case 'admin/pesanan/create':
+        include 'views/admin/pesanan/create.php';
+        break;
+    case 'admin/pesanan/edit':
+        include 'views/admin/pesanan/edit.php';
+        break;
+    case 'admin/promo':
+        include 'views/admin/promo/index.php';
+        break;
+    case 'admin/promo/create':
+        include 'views/admin/promo/create.php';
+        break;
+    case 'admin/promo/edit':
+        include 'views/admin/promo/edit.php';
+        break;
+    case 'admin/pengguna':
+        include 'views/admin/pengguna/index.php';
+        break;
+    case 'admin/pengguna/create':
+        include 'views/admin/pengguna/create.php';
+        break;
+    case 'admin/pengguna/edit':
+        include 'views/admin/pengguna/edit.php';
+        break;
+    case 'admin/profil':
+        include 'views/admin/profil/index.php';
+        break;
+    case 'admin/admin-feedback':
+        include 'views/admin/feedback/index.php';
+        break;
+    case 'admin/login':
+        include 'views/admin/login.php';
+        break;
     default:
         include '404.php';
         break;
 }
 
-$page != 'admin' ? include 'views/footer.php' : include 'views/admin/footer.php';
+if (in_array($page, [
+    'admin',
+    'admin/menu',
+    'admin/create_menu',
+    'admin/edit_menu',
+    'admin/pesanan',
+    'admin/pesanan/create',
+    'admin/pesanan/edit',
+    'admin/profil',
+    'admin/pengguna',
+    'admin/pengguna/create',
+    'admin/pengguna/edit',
+    'admin/admin-feedback',
+    'admin/promo',
+    'admin/promo/create',
+    'admin/promo/edit',
+])) {
+    include 'views/admin/footer.php';
+} elseif ($page != 'admin/login') {
+    include 'views/footer.php';
+}
 
 $conn->close();

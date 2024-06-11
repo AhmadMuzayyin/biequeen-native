@@ -30,7 +30,9 @@
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+                <form action="/config/auth.php" method="post">
+                    <button type="submit" name="logout" class="btn btn-primary" href="login.html">Logout</button>
+                </form>
             </div>
         </div>
     </div>
@@ -43,10 +45,14 @@
 <!-- Custom scripts for all pages-->
 <script src="/views/admin/js/sb-admin-2.min.js"></script>
 <!-- Page level plugins -->
-<script src="/views/admin/vendor/chart.js/Chart.min.js"></script>
-<!-- Page level custom scripts -->
-<script src="/views/admin/js/demo/chart-area-demo.js"></script>
-<script src="/views/admin/js/demo/chart-pie-demo.js"></script>
+<script src="/views/admin/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/views/admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+</script>
+<?php echo yield_push('js'); ?>
 </body>
 
 </html>
