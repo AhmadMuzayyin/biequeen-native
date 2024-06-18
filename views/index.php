@@ -1,3 +1,9 @@
+<?php
+unset($_SESSION['pembayaran']);
+unset($_SESSION['diskon']);
+unset($_SESSION['kode_diskon']);
+unset($_SESSION['errors']);
+?>
 <section id="noresult-screen" class="no-result-main">
     <h1 class="d-none">Search Screen</h1>
     <h2 class="d-none">Search</h2>
@@ -26,27 +32,19 @@
             </div>
             <div class="homescreen-second-wrapper-bottom mt-16">
                 <div class="homescreen-second-wrapper-slider">
-                    <div class="category-slide redirect-clothes">
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/995f4a73-7b24-4fe6-80cb-0f4787a719b4_Go-Biz_20211028_185525.jpeg" width="140" height="100" alt="category-img">
-                        <div class="category-slide-content">
-                            <h4>Geprek Mayonis</h4>
-                            <h5>Rp. 15.000</h5>
+                    <?php
+                    $produk_terbaru = mysqli_query($conn, 'SELECT * FROM menus ORDER BY created_at DESC LIMIT 3;');
+                    // $produk_terbaru = mysqli_fetch_array($produk_terbaru);
+                    foreach ($produk_terbaru as $val) :
+                    ?>
+                        <div class="category-slide redirect-clothes">
+                            <img src="<?= $val['gambar'] ?>" width="100" height="100" alt="category-img">
+                            <div class="category-slide-content">
+                                <h4><?= $val['nama'] ?></h4>
+                                <h5>Rp. <?= number_format($val['harga']) ?> </h5>
+                            </div>
                         </div>
-                    </div>
-                    <div class="category-slide redirect-clothes">
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/f89e1574-9b6c-4bee-8fbe-4f9d30b510b1_menu-item-image_1616480827121.jpg" width="140" height="100" alt="category-img">
-                        <div class="category-slide-content">
-                            <h4>Geprek Sehat</h4>
-                            <h5>Rp. 15.000</h5>
-                        </div>
-                    </div>
-                    <div class="category-slide redirect-clothes">
-                        <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/718fa01a-8c35-4def-a9ad-d573b608c23c_Go-Biz_20210329_214756.jpeg" width="140" height="100" alt="category-img">
-                        <div class="category-slide-content">
-                            <h4>Geprek Dada</h4>
-                            <h5>Rp. 15.000</h5>
-                        </div>
-                    </div>
+                    <?php endforeach ?>
                 </div>
             </div>
         </div>
@@ -74,32 +72,24 @@
                 </div>
                 <div class="homescreen-fourth-wrapper-bottom mt-16">
                     <div class="homescreen-fourth-wrapper-slider">
-                        <div class="seller-slide redirect-clothes">
-                            <div class="seller-slide-top-content">
-                                <img src="/views/assets/images/homescreen-1/seller-1.png" alt="seller-img">
-                            </div>
-                            <div class="seller-slide-bottom-content">
-                                <h3 class="seller-name">Shor summer dress</h3>
-                                <div class="seller-bottom-price">
-                                    <div class="seller-bottom-price1">
-                                        <span class="seller-price-txt1">Rp. 680.00</span>
+                        <?php
+                        $produk_terlaris = mysqli_query($conn, 'SELECT m.menu_id, m.nama, m.harga, m.gambar, COUNT(o.menu_id) AS jumlah_pesanan FROM orders o JOIN menus m ON o.menu_id = m.menu_id GROUP BY o.menu_id, m.menu_id, m.nama ORDER BY jumlah_pesanan DESC LIMIT 5;');
+                        foreach ($produk_terlaris as $vall) :
+                        ?>
+                            <div class="seller-slide redirect-clothes">
+                                <div class="seller-slide-top-content">
+                                    <img src="<?= $vall['gambar'] ?>" width="200" height="240" alt="seller-img">
+                                </div>
+                                <div class="seller-slide-bottom-content">
+                                    <h3 class="seller-name">Shor summer dress</h3>
+                                    <div class="seller-bottom-price">
+                                        <div class="seller-bottom-price1">
+                                            <span class="seller-price-txt1">Rp. 680.00</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="seller-slide redirect-electronic">
-                            <div class="seller-slide-top-content">
-                                <img src="/views/assets/images/homescreen-1/seller-2.png" alt="seller-img">
-                            </div>
-                            <div class="seller-slide-bottom-content">
-                                <h3 class="seller-name">Bluetooth Speakers</h3>
-                                <div class="seller-bottom-price">
-                                    <div class="seller-bottom-price1">
-                                        <span class="seller-price-txt1">Rp. 80.00</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php endforeach ?>
                     </div>
                 </div>
             </div>
@@ -110,19 +100,14 @@
                 <div class="container">
                     <div class="homescreen-second-wrapper-top">
                         <div class="categories-first">
-                            <h2 class="home1-txt3">Kategori</h2>
-                        </div>
-                        <div class="view-all-second">
-                            <a href="arrivals.html">
-                                <p class="view-all-txt">Tampilkan<span><img src="/views/assets/svg/right-icon.svg" alt="right-arrow"></span></p>
-                            </a>
+                            <h2 class="home1-txt3">Semua Menu</h2>
                         </div>
                     </div>
                 </div>
                 <!-- menu dengan kategori -->
                 <div class="homescreen-eight-wrapper-bottom mt-16">
                     <div class="homescreen-eight-bottom-full">
-                        <ul class="nav nav-pills mb-3" id="homepage1-tab" role="tablist">
+                        <!-- <ul class="nav nav-pills mb-3" id="homepage1-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active custom-home1-tab-btn" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-selected="true">Semua</button>
                             </li>
@@ -135,83 +120,103 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link custom-home1-tab-btn" id="pills-cosmetics-tab" data-bs-toggle="pill" data-bs-target="#pills-snack" type="button" role="tab" aria-selected="false">Snack</button>
                             </li>
-                        </ul>
-                        <!-- semua menu -->
+                        </ul> -->
                         <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-all" role="tabpanel" tabindex="0">
-                                <div class="container">
-                                    <div class="homepage1-tab-details">
-                                        <div class="homepage1-tab-details-wrapper">
-                                            <div class="home1-tab-img">
-                                                <img src="/views/assets/images/homescreen-1/arrivals-2.png" alt="watch-img">
-                                            </div>
-                                            <div class="home1-tab-details">
-                                                <div class="home1-tab-details-full">
-                                                    <p class="tab-home1-txt1">All-in-One PC 12th Gen Intel Core i5-1235U 24-inch(60.5 cm) FHD An</p>
-                                                    <h3 class="tab-home1-txt2">Rp. 850.00</h3>
+                            <!-- semua menu -->
+                            <?php
+                            $menu  = mysqli_query($conn, "SELECT * FROM menus;");
+                            foreach ($menu as $mn) :
+                            ?>
+                                <div class="tab-pane fade show active" id="pills-all" role="tabpanel" tabindex="0">
+                                    <div class="container">
+                                        <div class="homepage1-tab-details">
+                                            <div class="homepage1-tab-details-wrapper">
+                                                <div class="home1-tab-img">
+                                                    <img src="<?= $mn['gambar'] ?>" width="128" height="110" alt="watch-img">
                                                 </div>
-                                            </div>
-                                            <div class="home1-tab-favourite">
-                                                <div class="plus-bnt-home1">
-                                                    <a href="javascript:void(0)">
-                                                        <img src="/views/assets/svg/plus-icon.svg" alt="plus-icon">
-                                                    </a>
+                                                <div class="home1-tab-details">
+                                                    <div class="home1-tab-details-full">
+                                                        <p class="tab-home1-txt1"><?= $mn['nama'] ?></p>
+                                                        <h3 class="tab-home1-txt2">Rp. <?= number_format($mn['harga']) ?></h3>
+                                                    </div>
+                                                </div>
+                                                <div class="home1-tab-favourite">
+                                                    <div class="plus-bnt-home1">
+                                                        <form action="/config/order.php" method="post">
+                                                            <input type="hidden" name="menu_id" value="<?= $mn['menu_id'] ?>">
+                                                            <input type="hidden" name="harga" value="<?= $mn['harga'] ?>">
+                                                            <button role="button" type="submit" name="tambah_keranjang">
+                                                                <img src="/views/assets/svg/plus-icon.svg" alt="plus-icon">
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach ?>
                             <!-- tab menu kategori -->
-                            <div class="tab-pane fade" id="pills-makanan" role="tabpanel" tabindex="0">
-                                <div class="container">
-                                    <div class="homepage1-tab-details">
-                                        <div class="homepage1-tab-details-wrapper">
-                                            <div class="home1-tab-img">
-                                                <img src="/views/assets/images/homescreen-1/arrivals-3.png" alt="watch-img">
-                                            </div>
-                                            <div class="home1-tab-details">
-                                                <div class="home1-tab-details-full">
-                                                    <p class="tab-home1-txt1">Western Dresses for Women | Short A-Line Dress for Girls | Maxi </p>
-                                                    <h3 class="tab-home1-txt2">Rp. 80.00</h3>
+                            <?php
+                            $makanan = mysqli_query($conn, "SELECT * FROM menus WHERE jenis = 'makanan';");
+                            foreach ($makanan as $mkn) :
+                            ?>
+                                <div class="tab-pane fade" id="pills-makanan" role="tabpanel" tabindex="0">
+                                    <div class="container">
+                                        <div class="homepage1-tab-details">
+                                            <div class="homepage1-tab-details-wrapper">
+                                                <div class="home1-tab-img">
+                                                    <img src="<?= $mkn['gambar'] ?>" width="128" height="110" alt="watch-img">
                                                 </div>
-                                            </div>
-                                            <div class="home1-tab-favourite">
-                                                <div class="plus-bnt-home1">
-                                                    <a href="javascript:void(0)">
-                                                        <img src="/views/assets/svg/plus-icon.svg" alt="plus-icon">
-                                                    </a>
+                                                <div class="home1-tab-details">
+                                                    <div class="home1-tab-details-full">
+                                                        <p class="tab-home1-txt1"><?= $mkn['nama'] ?></p>
+                                                        <h3 class="tab-home1-txt2">Rp. <?= number_format($mkn['harga']) ?></h3>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="pills-minuman" role="tabpanel" tabindex="0">
-                                <div class="container">
-                                    <div class="homepage1-tab-details">
-                                        <div class="homepage1-tab-details-wrapper">
-                                            <div class="home1-tab-img">
-                                                <img src="/views/assets/images/homescreen-1/arrivals-1.png" alt="watch-img">
-                                            </div>
-                                            <div class="home1-tab-details">
-                                                <div class="home1-tab-details-full">
-                                                    <p class="tab-home1-txt1">Fire-Boltt Phoenix Smart Watch with Bluetooth Calling...</p>
-                                                    <h3 class="tab-home1-txt2">Rp. 150.00</h3>
-                                                </div>
-                                            </div>
-                                            <div class="home1-tab-favourite">
-                                                <div class="plus-bnt-home1">
-                                                    <a href="javascript:void(0)">
-                                                        <img src="/views/assets/svg/plus-icon.svg" alt="plus-icon">
-                                                    </a>
+                                                <div class="home1-tab-favourite">
+                                                    <div class="plus-bnt-home1">
+                                                        <a href="javascript:void(0)">
+                                                            <img src="/views/assets/svg/plus-icon.svg" alt="plus-icon">
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade" id="pills-snack" role="tabpanel" tabindex="0">
+                            <?php endforeach ?>
+
+                            <?php
+                            $minuman = mysqli_query($conn, "SELECT * FROM menus WHERE jenis like 'minuman';");
+                            foreach ($minuman as $minum) :
+                            ?>
+                                <div class="tab-pane fade" id="pills-minuman" role="tabpanel" tabindex="0">
+                                    <div class="container">
+                                        <div class="homepage1-tab-details">
+                                            <div class="homepage1-tab-details-wrapper">
+                                                <div class="home1-tab-img">
+                                                    <img src="<?= $minum['gambar'] ?>" width="128" height="110" alt="watch-img">
+                                                </div>
+                                                <div class="home1-tab-details">
+                                                    <div class="home1-tab-details-full">
+                                                        <p class="tab-home1-txt1"><?= $minum['nama'] ?></p>
+                                                        <h3 class="tab-home1-txt2">Rp. <?= number_format($minum['harga']) ?></h3>
+                                                    </div>
+                                                </div>
+                                                <div class="home1-tab-favourite">
+                                                    <div class="plus-bnt-home1">
+                                                        <a href="javascript:void(0)">
+                                                            <img src="/views/assets/svg/plus-icon.svg" alt="plus-icon">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                            <!-- <div class="tab-pane fade" id="pills-snack" role="tabpanel" tabindex="0">
                                 <div class="container">
                                     <div class="homepage1-tab-details">
                                         <div class="homepage1-tab-details-wrapper">
@@ -234,7 +239,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

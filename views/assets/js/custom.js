@@ -118,7 +118,7 @@ $(window).on("load" , function () {
 $(".cloth-redirect, .best-seller-redirect").wrap('<a href="/product"></a>');
 $(".shoes-redirect").wrap('<a href="single-shoes.html"></a>');
 $(".electronic-redirect").wrap('<a href="single-electronics.html"></a>');
-$(".offer-1, .homepage1-tab-details-wrapper").wrap('<a href="/products"></a>');
+// $(".offer-1, .homepage1-tab-details-wrapper").wrap('<a href="/products"></a>');
 $(".offer-2, .offer-4").wrap('<a href="electronic-screen.html"></a>');
 $(".offer-3").wrap('<a href="shoes-screen.html"></a>');
 /*-------------------------------------OTP Section-------------------------------------*/

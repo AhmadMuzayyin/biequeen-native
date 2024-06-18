@@ -5,133 +5,115 @@
         <div class="Checkout-sec-full">
             <div class="Checkout-first-sec">
                 <div class="Checkout-first-sec-full">
+                    <?php if (isset($_SESSION['errors'])) { ?>
+                        <ul style="color:red;">
+                            <?php foreach ($_SESSION['errors'] as $error) {
+                                echo "<li>$error</li>";
+                            } ?>
+                        </ul>
+                    <?php } ?>
+                    <?php
+                    $cart = mysqli_query($conn, "SELECT 
+                SUM(
+                    CASE 
+                        WHEN orders.diskon IS NOT NULL THEN (orders.jumlah * menus.harga) - orders.diskon
+                        ELSE orders.jumlah * menus.harga
+                    END
+                ) AS total_harga
+            FROM orders
+            JOIN menus ON orders.menu_id = menus.menu_id
+            WHERE orders.in_cart = 1; ");
+                    ?>
                     <span>Pesanan Saya</span>
-                    <span>Rp. 300.00</span>
+                    <span>Rp. <?= $cart->num_rows > 0 ? number_format($cart->fetch_assoc()['total_harga']) : 0 ?></span>
                 </div>
                 <div class="Checkout-border"></div>
             </div>
             <div class="Checkout-second-sec">
                 <div class="Checkout-second-full">
                     <?php
-                    for ($i = 0; $i < 2; $i++) {
+                    $diskon = 0;
+                    $orders = mysqli_query($conn, "SELECT m.*, o.jumlah, o.diskon FROM orders o INNER JOIN menus m ON o.menu_id = m.menu_id WHERE o.in_cart = 1; ");
+                    foreach ($orders as $order) {
+                        $diskon += $order['diskon'];
                     ?>
                         <div class="check-deatils">
-                            <span class="check-txt1">Geprek Dada...</span>
-                            <span class="check-txt2">1 x Rp. 150.000</span>
+                            <span class="check-txt1"><?= $order['nama'] ?></span>
+                            <span class="check-txt2"><?= $order['jumlah'] ?> x Rp. <?= number_format($order['harga']) ?></span>
                         </div>
                     <?php
                     }
                     ?>
+                    <hr>
+                    <div class="check-deatils">
+                        <span class="check-txt1 text-success">Diskon</span>
+                        <span class="check-txt2 text-success">Rp. <?= number_format($diskon) ?></span>
+                    </div>
                 </div>
             </div>
             <div class="Checkout-third-sec">
                 <div class="Checkout-third-sec-full">
-                    <a href="#checkout-modal" data-bs-toggle="modal">
-                        <div class="shopping-deatils">
-                            <div class="check-icon-sec">
-                                <img src="/views/assets/svg/location-icon.svg" alt="location-icon">
-                            </div>
-                            <div class="check-deatils-sec">
-                                <p class="shipp-txt1">Alamat Lengkap</p>
-                                <p class="shipp-txt2">8000 S Kirkland Ave, Chicago, IL 6065</p>
-                            </div>
-                            <div class="check-back-sec">
-                                <img src="/views/assets/svg/right-icon.svg" alt="right-icon">
-                            </div>
+                    <form>
+                        <div class="form-check border-bottom px-0 custom-radio ">
+                            <input class="form-check-input" type="radio" name="pembayaran" id="cod" value="cod">
+                            <label class="form-check-label checkout-modal-lbl-payment" for="cod">
+                                <span class="payment-type">
+                                    <img src="/views/assets/images/account-screen/wallet.svg" alt="wallet-icon" class="black-icon">
+                                </span>
+                                <span class="wallet-txt1">Cash On Delivery</span>
+                            </label>
                         </div>
-                        <div class="shipping-boder"></div>
-                    </a>
-                    <a href="#checkout-modal-payment" data-bs-toggle="modal">
-                        <div class="shopping-deatils mt-16">
-                            <div class="check-icon-sec">
-                                <img src="/views/assets/images/account-screen/wallet.svg" alt="wallet-icon">
-                            </div>
-                            <div class="check-deatils-sec">
-                                <p class="shipp-txt1">Metode Pembayaran</p>
-                                <p class="shipp-txt2">xxxx xxxx xxxx 4865</p>
-                            </div>
-                            <div class="check-back-sec">
-                                <img src="/views/assets/svg/right-icon.svg" alt="right-icon">
-                            </div>
+                        <div class="form-check border-bottom px-0 custom-radio">
+                            <input class="form-check-input" type="radio" name="pembayaran" id="qris" value="qris">
+                            <label class="form-check-label checkout-modal-lbl-payment" for="qris">
+                                <span class="payment-type">
+                                    <img src="/views/assets/svg/payment1.svg" alt="Payment-icon">
+                                </span>
+                                <span class="wallet-txt1">QRIS</span>
+                            </label>
                         </div>
-                    </a>
+                    </form>
                 </div>
             </div>
             <div class="Checkout-fourth-sec">
                 <div class="Checkout-fourth-sec-full">
                     <form class="checkout-form">
                         <label>Catatan:</label>
-                        <textarea rows="4" placeholder="Tulis catatan disni..." class="product-textarea"></textarea>
+                        <textarea rows="4" id="catatan" placeholder="Tulis catatan disni..." class="product-textarea"></textarea>
                     </form>
                 </div>
             </div>
             <div class="confirm-order-btn">
-                <a href="/order-success">Konfirmasi Pesanan</a>
+                <!-- <a href="/order-success">Konfirmasi Pesanan</a> -->
+                <a href="javascript:void(0)" onclick="konfimasi()">Konfirmasi Pesanan</a>
             </div>
         </div>
     </div>
 </section>
 <!-- Checkout Section End -->
-<!-- Checkout Shipping Modal Section Start -->
-<div class="modal fade" id="checkout-modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content checkout-modal-content">
-            <div class="modal-header">
-                <p class="checkout-modal-txt1">Tulis Alamat Lengkap Anda</p>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="kecamatan">Kecamatan</label>
-                        <input type="text" name="kecamatan" id="kecamatan" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="kelurahan">Kelurahan</label>
-                        <input type="text" name="kelurahan" id="kelurahan" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="jalan">Jalan</label>
-                        <textarea name="jalan" id="jalan" class="form-control"></textarea>
-                    </div>
-                    <div class="form-group mt-2">
-                        <botton class="btn btn-danger">Simpan</botton>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Checkout Shipping Modal Section End -->
-<!-- Checkout Payment Modal Section Start -->
-<div class="modal fade" id="checkout-modal-payment" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content checkout-modal-content">
-            <div class="modal-header">
-                <p class="checkout-modal-txt1">Pilih Metode Pembayaran</p>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-check border-bottom px-0 custom-radio ">
-                        <input class="form-check-input" type="radio" name="pembayaran" id="cod" value="cod">
-                        <label class="form-check-label checkout-modal-lbl-payment" for="cod">
-                            <span class="payment-type">
-                                <img src="/views/assets/images/account-screen/wallet.svg" alt="wallet-icon" class="black-icon">
-                            </span>
-                            <span class="wallet-txt1">Cash On Delivery</span>
-                        </label>
-                    </div>
-                    <div class="form-check border-bottom px-0 custom-radio">
-                        <input class="form-check-input" type="radio" name="pembayaran" id="qris" value="qris">
-                        <label class="form-check-label checkout-modal-lbl-payment" for="qris">
-                            <span class="payment-type">
-                                <img src="/views/assets/svg/payment1.svg" alt="Payment-icon">
-                            </span>
-                            <span class="wallet-txt1">QRIS</span>
-                        </label>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Checkout Payment Modal Section End -->
+<script>
+    function konfimasi() {
+        var note = $('#catatan').val()
+        var selectedValue = $("input[name='pembayaran']:checked").val();
+        if (selectedValue) {
+            $.ajax({
+                url: '/config/checkout.php',
+                type: 'POST',
+                data: {
+                    konfimasi: true,
+                    catatan: note,
+                    pembayaran: selectedValue
+                },
+                success: function(response) {
+                    if (response.status == 'success') {
+                        window.location.href = '/order-success';
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        } else {
+            alert('Pilih metode pembayaran terlebih dahulu');
+        }
+    }
+</script>

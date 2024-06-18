@@ -41,8 +41,7 @@
                                         orders
                                     JOIN 
                                         menus ON orders.menu_id = menus.menu_id
-                                    JOIN 
-                                        users ON orders.user_id = users.user_id
+                                    WHERE in_cart = 0
                                     ORDER BY 
                                         orders.created_at DESC;
                                     ";
