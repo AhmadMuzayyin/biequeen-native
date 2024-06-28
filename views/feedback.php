@@ -3,30 +3,27 @@
     <div class="container">
         <div class="sign-in-full-section ">
             <h1 class="d-none">Feedback Page</h1>
-            <form class="forget-password-screen-form">
+            <form class="forget-password-screen-form" action="/config/feedback.php" method="post">
                 <div class="feedback-sec">
-                    <label class="feedback-lbl"> Your Email Address</label>
-                    <input type="email" id="Email" placeholder="Write here" class="feedback-sec-txt">
+                    <label class="feedback-lbl">Nama</label>
+                    <input type="text" id="name" name="nama" placeholder="Write here" class="feedback-sec-txt">
                 </div>
-                <div class="single-input-form-menupage1 mt-16">
-                    <label class="feedback-lbl">Select Subject (Optional)</label>
-                    <div class="menupage1-form-custom ">
-                        <select name="persons" class="arrow-icon">
-                            <option disabled selected>Choose Your Subject</option>
-                            <option>Subject 1</option>
-                            <option>Subject 2</option>
-                            <option>Subject 3</option>
-                        </select>
-                    </div>
+                <div class="feedback-sec">
+                    <label class="feedback-lbl">Email</label>
+                    <input type="email" id="Email" name="email" placeholder="Write here" class="feedback-sec-txt">
+                </div>
+                <div class="feedback-sec">
+                    <label class="feedback-lbl">whatsapp</label>
+                    <input type="number" id="whatsapp" name="whatsapp" min="62" placeholder="Write here" class="feedback-sec-txt">
                 </div>
                 <div class="feedback-text mt-16">
-                    <label class="feedback-lbl">Description</label>
-                    <textarea rows="4" class="feedback-tp" placeholder="Write here"></textarea>
+                    <label class="feedback-lbl">Pesan</label>
+                    <textarea rows="4" class="feedback-tp" name="pesan" placeholder="Write here"></textarea>
+                </div>
+                <div class="feedback-btn">
+                    <button type="submit">Submit</button>
                 </div>
             </form>
-            <div class="feedback-btn">
-                <a href="javascript:void(0)">Submit</a>
-            </div>
         </div>
     </div>
 </section>

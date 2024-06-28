@@ -219,7 +219,7 @@ body::-webkit-scrollbar {
 .apply-code-btn a,
 .filter-btn a,
 .add-new-card-btn a,
-.feedback-btn a {  
+.feedback-btn button {  
     width: 337px;
     border-radius: 8px;
     background: #FF4C3B;

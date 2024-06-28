@@ -82,7 +82,7 @@
                 <p>Whatsapp</p>
                 <div class="code-details mt-16">
                     <div class="enter-code-promocode1">
-                        <input type="number" min="1" name="wa" id="wa">
+                        <input type="number" min="62" name="wa" id="wa">
                     </div>
                 </div>
             </div>

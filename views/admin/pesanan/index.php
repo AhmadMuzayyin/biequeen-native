@@ -35,8 +35,8 @@
                                 <?php
                                 $sql = "
                                     SELECT 
-                                        orders.id, orders.nama_pelanggan, orders.whatsapp, orders.jumlah, orders.total_harga, 
-                                        menus.nama AS pesanan, menus.deskripsi AS deskripsi, menus.harga AS harga , orders.status, orders.created_at
+                                        orders.id, orders.nama_pelanggan, orders.whatsapp, orders.jumlah, orders.total_harga, orders.catatan, 
+                                        menus.nama AS pesanan, menus.deskripsi, menus.harga AS harga , orders.status, orders.created_at, menus.gambar, menus.varian, menus.toping, menus.jenis
                                     FROM 
                                         orders
                                     JOIN 
@@ -46,7 +46,7 @@
                                         orders.created_at DESC;
                                     ";
                                 $data = mysqli_query($conn, $sql);
-                                foreach ($data as $item) {
+                                foreach ($data as $key => $item) {
                                 ?>
                                     <tr>
                                         <td><?= $item['nama_pelanggan'] ?></td>
@@ -101,11 +101,11 @@
                                         <td>
                                             <div class="btn-group">
                                                 <!-- detail -->
-                                                <button type="button" class="btn btn-info btn-sm" data-target="#detailMenu-<?= $item['menu_id'] ?>" data-toggle="modal">
+                                                <button type="button" class="btn btn-info btn-sm" data-target="#detailMenu-<?= $key ?>" data-toggle="modal">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="detailMenu-<?= $item['menu_id'] ?>" tabindex="-1">
+                                                <div class="modal fade" id="detailMenu-<?= $key ?>" tabindex="-1">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -118,7 +118,7 @@
                                                                 <table class="table">
                                                                     <tr>
                                                                         <td>Nama</td>
-                                                                        <td><?= $item['nama'] ?></td>
+                                                                        <td><?= $item['pesanan'] ?></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td>Deskripsi</td>
@@ -147,15 +147,9 @@
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td>Created_at</td>
+                                                                        <td>Catatan</td>
                                                                         <td>
-                                                                            <?= date('d F Y', strtotime($item['created_at'])) ?>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Updated_at</td>
-                                                                        <td>
-                                                                            <?= date('d F Y', strtotime($item['created_at'])) ?>
+                                                                            <?= $item['catatan'] ?>
                                                                         </td>
                                                                     </tr>
                                                                 </table>

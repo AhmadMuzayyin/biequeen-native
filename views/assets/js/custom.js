@@ -236,7 +236,7 @@ jQuery('.theme-change').on('click',function(){
 });
 
 /*-------------------------------------Anchore Tag Link Added-------------------------------------*/
-$(".redirect-clothes").wrap('<a href="/products"></a>');
+// $(".redirect-clothes").wrap('<a href="/products"></a>');
 $(".redirect-electronic").wrap('<a href="electronic-screen.html"></a>');
 $(".redirect-shoes").wrap('<a href="shoes-screen.html"></a>');
 

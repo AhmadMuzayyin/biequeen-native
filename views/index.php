@@ -49,7 +49,7 @@ unset($_SESSION['errors']);
             </div>
         </div>
         <!-- discount -->
-        <div class="homescreen-third-sec mt-32">
+        <!-- <div class="homescreen-third-sec mt-32">
             <div class="container">
                 <div class="homescreen-third-wrapper">
                     <h3>Spring Discounts Up To 30% Off</h3>
@@ -59,14 +59,19 @@ unset($_SESSION['errors']);
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- produk terlaris -->
         <div class="homescreen-fourth-sec mt-32">
             <div class="homescreen-fourth-wrapper">
                 <div class="container">
                     <div class="homescreen-second-wrapper-top">
                         <div class="categories-first">
-                            <h2 class="home1-txt3">Produk Terlaris</h2>
+                            <?php
+                            $cek = 0;
+                            if ($cek > 1) :
+                            ?>
+                                <h2 class="home1-txt3">Produk Terlaris</h2>
+                            <?php endif ?>
                         </div>
                     </div>
                 </div>
@@ -75,21 +80,24 @@ unset($_SESSION['errors']);
                         <?php
                         $produk_terlaris = mysqli_query($conn, 'SELECT m.menu_id, m.nama, m.harga, m.gambar, COUNT(o.menu_id) AS jumlah_pesanan FROM orders o JOIN menus m ON o.menu_id = m.menu_id GROUP BY o.menu_id, m.menu_id, m.nama ORDER BY jumlah_pesanan DESC LIMIT 5;');
                         foreach ($produk_terlaris as $vall) :
+                            if ($vall['jumlah_pesanan'] > 2) :
+                                $cek = 1;
                         ?>
-                            <div class="seller-slide redirect-clothes">
-                                <div class="seller-slide-top-content">
-                                    <img src="<?= $vall['gambar'] ?>" width="200" height="240" alt="seller-img">
-                                </div>
-                                <div class="seller-slide-bottom-content">
-                                    <h3 class="seller-name">Shor summer dress</h3>
-                                    <div class="seller-bottom-price">
-                                        <div class="seller-bottom-price1">
-                                            <span class="seller-price-txt1">Rp. 680.00</span>
+                                <div class="seller-slide redirect-clothes">
+                                    <div class="seller-slide-top-content">
+                                        <img src="<?= $vall['gambar'] ?>" width="200" height="240" alt="seller-img">
+                                    </div>
+                                    <div class="seller-slide-bottom-content">
+                                        <h3 class="seller-name">Shor summer dress</h3>
+                                        <div class="seller-bottom-price">
+                                            <div class="seller-bottom-price1">
+                                                <span class="seller-price-txt1">Rp. 680.00</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        <?php endforeach ?>
+                        <?php endif;
+                        endforeach ?>
                     </div>
                 </div>
             </div>
