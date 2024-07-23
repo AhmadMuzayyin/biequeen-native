@@ -78,7 +78,7 @@ $menu = mysqli_fetch_assoc($menu);
                             </div>
                         </div>
                         <input type="hidden" name="menu_id" value="<?= $menu['menu_id'] ?>">
-                        <a href="/admin/menu" class="btn btn-secondary">Batal</a>
+                        <a href="/admin/pesanan" class="btn btn-secondary">Batal</a>
                         <button type="submit" name="update_menu" class="btn btn-danger">Simpan</button>
                     </form>
                 </div>

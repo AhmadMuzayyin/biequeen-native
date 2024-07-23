@@ -100,15 +100,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_pesanan'])) {
 if (isset($_GET['pesanan_id']) && is_numeric($_GET['pesanan_id'])) {
     if (isset($_GET['ac'])) {
         $pesanan_id = intval($_GET['pesanan_id']);
-        $gambar = mysqli_query($conn, "SELECT * FROM menus WHERE id = $pesanan_id");
-        $gambar = mysqli_fetch_assoc($gambar);
-        if (file_exists('../' . $gambar['gambar'])) {
-            unlink('../' . $gambar['gambar']);
-        }
         $stmt = $conn->prepare("DELETE FROM orders WHERE id = ?");
         $stmt->bind_param("i", $pesanan_id);
         if ($stmt->execute()) {
-            header("Location: /admin/menu");
+            header("Location: /admin/pesanan");
             exit();
         } else {
             echo "Error: " . $stmt->error;

@@ -36,7 +36,7 @@
                                 $sql = "
                                     SELECT 
                                         orders.id, orders.nama_pelanggan, orders.whatsapp, orders.jumlah, orders.total_harga, orders.catatan, 
-                                        menus.nama AS pesanan, menus.deskripsi, menus.harga AS harga , orders.status, orders.created_at, menus.gambar, menus.varian, menus.toping, menus.jenis
+                                        menus.nama AS pesanan, menus.deskripsi, menus.harga AS harga , orders.status, orders.created_at, menus.gambar, menus.varian, menus.toping, menus.jenis, menus.menu_id
                                     FROM 
                                         orders
                                     JOIN 
@@ -160,11 +160,11 @@
                                                 <!-- end Modal -->
                                                 <!-- end detail -->
                                                 <!-- edit -->
-                                                <a href="/admin/edit_menu?menu_id=<?= $item['menu_id'] ?>" class="btn btn-success btn-sm">
+                                                <!-- <a href="/admin/edit_menu?menu_id=<?= $item['menu_id'] ?>" class="btn btn-success btn-sm">
                                                     <i class="fas fa-pencil-alt"></i>
-                                                </a>
+                                                </a> -->
                                                 <!-- end edit -->
-                                                <a href="/config/menu.php?menu_id=<?= $item['menu_id'] ?>&ac=delete" class="btn btn-danger btn-sm">
+                                                <a href="/config/pesanan.php?menu_id=<?= $item['menu_id'] ?>&pesanan_id=<?= $item['id'] ?>&ac=delete" class="btn btn-danger btn-sm">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </div>

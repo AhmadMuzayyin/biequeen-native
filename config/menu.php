@@ -109,24 +109,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_menu'])) {
         header("Location: /admin/create_menu");
     }
 }
-if (isset($_GET['menu_id']) && is_numeric($_GET['menu_id'])) {
-    if (isset($_GET['ac'])) {
-        $menu_id = intval($_GET['menu_id']);
-        $gambar = mysqli_query($conn, "SELECT * FROM menus WHERE menu_id = $menu_id");
-        $gambar = mysqli_fetch_assoc($gambar);
-        if (file_exists('../' . $gambar['gambar'])) {
-            unlink('../' . $gambar['gambar']);
-        }
-        $stmt = $conn->prepare("DELETE FROM menus WHERE menu_id = ?");
-        $stmt->bind_param("i", $menu_id);
-        if ($stmt->execute()) {
-            header("Location: /admin/menu");
-            exit();
-        } else {
-            echo "Error: " . $stmt->error;
-        }
+if (isset($_GET['menu_id']) && is_numeric($_GET['menu_id']) && isset($_GET['ac'])) {
+    $menu_id = intval($_GET['menu_id']);
+    $gambar = mysqli_query($conn, "SELECT * FROM menus WHERE menu_id = $menu_id");
+    $gambar = mysqli_fetch_assoc($gambar);
+    if (file_exists('../' . $gambar['gambar'])) {
+        unlink('../' . $gambar['gambar']);
     }
-
+    $stmt = $conn->prepare("DELETE FROM orders WHERE menu_id = ?");
+    $stmt->bind_param("i", $menu_id);
+    $stmt->execute();
+    $stmt = $conn->prepare("DELETE FROM menus WHERE menu_id = ?");
+    $stmt->bind_param("i", $menu_id);
+    if ($stmt->execute()) {
+        header("Location: /admin/menu");
+        exit();
+    } else {
+        echo "Error: " . $stmt->error;
+    }
     $stmt->close();
 }
 function sanitize_input($data)
