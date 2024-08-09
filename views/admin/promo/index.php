@@ -46,7 +46,7 @@ unset($_SESSION['errors']);
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </a>
                                                 <!-- end edit -->
-                                                <a href="/config/menu.php?voucher_id=<?= $item['id'] ?>&ac=delete" class="btn btn-danger btn-sm">
+                                                <a href="/config/promo.php?voucher_id=<?= $item['id'] ?>&ac=delete" class="btn btn-danger btn-sm">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </div>

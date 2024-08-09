@@ -58,19 +58,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     }
 }
 // Delete Voucher
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
-    $id = sanitize_input($_POST['id']);
-
-    $stmt = $conn->prepare("DELETE FROM vouchers WHERE id = ?");
-    $stmt->bind_param("i", $id);
-
-    if ($stmt->execute()) {
-        $message = "Voucher deleted successfully.";
-    } else {
-        $message = "Error: " . $stmt->error;
+if (isset($_GET['voucher_id']) && is_numeric($_GET['voucher_id']) && isset($_GET['ac'])) {
+    try {
+        $id = intval($_GET['voucher_id']);;
+        $stmt = $conn->prepare("DELETE FROM vouchers WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        if ($stmt->execute()) {
+            $message = "Voucher deleted successfully.";
+        } else {
+            $message = "Error: " . $stmt->error;
+        }
+        $stmt->close();
+        header("Location: /admin/promo");
+    } catch (\Throwable $th) {
+        var_dump($th->getMessage());
+        die();
     }
-
-    $stmt->close();
 }
 
 function sanitize_input($data)
