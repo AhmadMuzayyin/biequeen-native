@@ -5,20 +5,24 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: /admin/login");
     exit();
 }
+function generateRandomString($prefix, $length = 6) {
+    $randomNumber = substr(str_shuffle("0123456789"), 0, $length);
+    return $prefix . $randomNumber;
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_pesanan'])) {
     $user_id = $_SESSION['user_id'];
     $menu_id = $_POST['menu_id'];
     $nama_pelanggan = sanitize_input($_POST['nama']);
-    $whatsapp = sanitize_whatsapp($_POST['whatsapp']);
+    $id_pelanggan = generateRandomString('CST',10);
     $jumlah = sanitize_input($_POST['jumlah']);
     $catatan = sanitize_input($_POST['catatan']);
     $status = "Menunggu";
     $created_at = date('Y-m-d H:i:s');
     $updated_at = date('Y-m-d H:i:s');
 
-    $data = compact('nama_pelanggan', 'whatsapp', 'jumlah', 'total_harga', 'catatan', 'status');
+    $data = compact('nama_pelanggan', 'id_pelanggan', 'jumlah', 'total_harga', 'catatan', 'status');
     $errors = validate_pesanan_data($data);
-    // var_dump($menu_id);
+    // var_dump($id_pelanggan);
     // die();
     if (empty($errors)) {
         unset($_SESSION['errors']);
@@ -26,8 +30,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_pesanan'])) {
         $menu = mysqli_fetch_assoc($q);
         $total_harga = $menu['harga'] * $jumlah;
         $stmt = $conn->prepare("
-        INSERT INTO orders (user_id, menu_id, nama_pelanggan, whatsapp, jumlah, total_harga, catatan, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("iisssdssss", $user_id, $menu_id, $nama_pelanggan, $whatsapp, $jumlah, $total_harga, $catatan, $status, $created_at, $updated_at);
+        INSERT INTO orders (user_id, menu_id, id_pelanggan, nama_pelanggan, jumlah, total_harga, catatan, status, created_at, updated_at) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "iisssdssss",
+        $user_id,
+        $menu_id,
+        $id_pelanggan,
+        $nama_pelanggan,
+        $jumlah, 
+        $total_harga,
+        $catatan,     
+        $status,      
+        $created_at,
+        $updated_at 
+    );
         if ($stmt->execute()) {
             header("Location: /admin/pesanan/create");
             exit();
@@ -154,9 +172,6 @@ function validate_pesanan_data($data)
 
     if (empty($data['nama_pelanggan'])) {
         $errors[] = "Nama is required.";
-    }
-    if (empty($data['whatsapp'])) {
-        $errors[] = "Whatsapp is required.";
     }
     if (!is_numeric($data['jumlah']) || $data['jumlah'] <= 0) {
         $errors[] = "Harga must be a positive number.";

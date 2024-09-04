@@ -1,17 +1,22 @@
 <?php
 include 'db.php';
+function generateRandomString($prefix, $length = 6) {
+    $randomNumber = substr(str_shuffle("0123456789"), 0, $length);
+    return $prefix . $randomNumber;
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['tambah_keranjang'])) {
     $menu_id = $_POST['menu_id'];
     $harga = $_POST['harga'];
+    $id_pelanggan = generateRandomString('CST',10);
     $jumlah = 1;
     if ($harga !== null) {
         try {
             $total_harga = $harga * $jumlah;
             $created_at = date("Y-m-d H:i:s");
             $updated_at = date("Y-m-d H:i:s");
-            $stmt = $conn->prepare("INSERT INTO orders (menu_id, jumlah, total_harga, created_at, updated_at)
-                            VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("iiiss", $menu_id, $jumlah, $total_harga, $created_at, $updated_at);
+            $stmt = $conn->prepare("INSERT INTO orders (menu_id, id_pelanggan, jumlah, total_harga, created_at, updated_at)
+                            VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("isiiss", $menu_id, $id_pelanggan, $jumlah, $total_harga, $created_at, $updated_at);
             $stmt->execute();
             echo "Order added successfully.";
             header("Location: /");

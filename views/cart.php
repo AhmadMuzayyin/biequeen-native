@@ -79,14 +79,6 @@
                 </div>
             </div>
             <div class="without-code-second-full mt-2">
-                <p>Whatsapp</p>
-                <div class="code-details mt-16">
-                    <div class="enter-code-promocode1">
-                        <input type="number" min="62" name="wa" id="wa">
-                    </div>
-                </div>
-            </div>
-            <div class="without-code-second-full mt-2">
                 <p>Kode Promo:</p>
                 <div class="code-details mt-16">
                     <div class="enter-code-promocode1">
@@ -181,7 +173,6 @@
             type: 'POST',
             data: {
                 nama: $('#nama').val(),
-                wa: $('#wa').val(),
                 checkout: true
             },
             success: function(response) {

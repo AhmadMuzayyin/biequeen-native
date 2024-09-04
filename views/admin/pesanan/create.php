@@ -28,12 +28,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="whatsapp" class="col-sm-3 col-form-label">Whatsapp</label>
-                                    <div class="col-sm-9">
-                                        <input type="number" class="form-control" id="whatsapp" name="whatsapp" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <label for="menu_id" class="col-sm-3 col-form-label">Menu</label>
                                     <div class="col-sm-9">
                                         <?php

@@ -21,8 +21,8 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Pelanggan</th>
-                                    <th>Whatsapp</th>
+                                    <th>ID Pelanggan</th>
+                                    <th>Nama</th>
                                     <th>Pesanan</th>
                                     <th>Harga</th>
                                     <th>Qty</th>
@@ -35,13 +35,12 @@
                                 <?php
                                 $sql = "
                                     SELECT 
-                                        orders.id, orders.nama_pelanggan, orders.whatsapp, orders.jumlah, orders.total_harga, orders.catatan, 
+                                        orders.id, orders.nama_pelanggan, orders.id_pelanggan, orders.jumlah, orders.total_harga, orders.catatan, 
                                         menus.nama AS pesanan, menus.deskripsi, menus.harga AS harga , orders.status, orders.created_at, menus.gambar, menus.varian, menus.toping, menus.jenis, menus.menu_id
                                     FROM 
                                         orders
                                     JOIN 
                                         menus ON orders.menu_id = menus.menu_id
-                                    WHERE in_cart = 0
                                     ORDER BY 
                                         orders.created_at DESC;
                                     ";
@@ -49,10 +48,10 @@
                                 foreach ($data as $key => $item) {
                                 ?>
                                     <tr>
-                                        <td><?= $item['nama_pelanggan'] ?></td>
                                         <td>
-                                            <a href="https://wa.me/<?= $item['whatsapp'] ?>" target="_blank"><?= $item['whatsapp'] ?></a>
+                                            <?= $item['id_pelanggan'] ?>
                                         </td>
+                                        <td><?= $item['nama_pelanggan'] ?></td>
                                         <td><?= $item['pesanan'] ?></td>
                                         <td>Rp.<?= number_format($item['harga']) ?></td>
                                         <td><?= $item['jumlah'] ?></td>
