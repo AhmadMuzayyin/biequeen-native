@@ -17,6 +17,9 @@ session_start();
     <link rel="stylesheet" href="/views/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/views/assets/css/style.css">
     <link rel="stylesheet" href="/views/assets/css/media-query.css">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8407972809852383"
+     crossorigin="anonymous"></script>
 </head>
 
 <body>
